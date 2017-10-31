@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>风雨无阻</title>
+
+    <style type="text/css">
+        canvas {
+            background-color: gray;
+        }
+    </style>
+
+</head>
+<body>
+
+<canvas id="canvas" width="1500" height="800"></canvas>
+
+<script>
+    window.onload = function () {
+        var canvas = document.getElementById('canvas')
+        var ctx = canvas.getContext('2d')
+        var centerX = 400
+        var centerY = 400
+        var dataArr = [new YBData(120, 'red', 1, centerX, centerY),
+            new YBData(100, 'darkgray', 2, centerX, centerY),
+            new YBData(80, 'white', 3, centerX, centerY),
+            new YBData(60, 'green', 4, centerX, centerY),
+            new YBData(40, 'orange', 5, centerX, centerY),
+            new YBData(20, 'purple', 6, centerX, centerY),]
+        var points = new  Array()
+        for (var i= 0; i < 100; i++) {
+            points.push(400)
+        }
+
+        setInterval(function () {
+            canvas.width = canvas.width
+            for (var i = 0; i < dataArr.length; i++) {
+                var data = dataArr[i]
+                ctx.beginPath()
+                if (i != 0){
+                    var jiaoDu = data.currentJiaoDu * Math.PI / 180
+                    var lastData = dataArr[i - 1]
+                    data.centerX = lastData.centerX + lastData.r * Math.cos(jiaoDu)
+                    data.centerY = lastData.centerY + lastData.r * Math.sin(jiaoDu)
+                }
+                ctx.arc(data.centerX, data.centerY, data.r, 0, Math.PI * 2)
+                ctx.fillStyle = data.color
+                ctx.fill()
+                data.currentJiaoDu += data.jiaoDu
+                data.currentJiaoDu >= 360 ? data.currentJiaoDu -= 360 : 0
+            }
+            // 画线
+            var lastYuan = dataArr[dataArr.length - 1]
+            ctx.moveTo(lastYuan.centerX, lastYuan.centerY)
+            ctx.lineWidth = 3
+            ctx.strokeStyle = 'orange'
+            var pointData = points.pop()
+            pointData = lastYuan.centerY
+            points.unshift(pointData)
+
+            for (var i = 0; i < points.length; i++) {
+                var data = points[i]
+                ctx.lineTo(830 + 4 * i, data)
+            }
+            ctx.stroke()
+        }, 30)
+    }
+
+    function YBData(r, color, jiaoDu, centerX, centerY) {
+        this.r = r
+        this.color = color
+        this.jiaoDu = jiaoDu
+        this.centerX = centerX
+        this.centerY = centerY
+        this.currentJiaoDu = 0
+    }
+    console.log("求带走...")
+    console.log("QQ 415461850")
+    console.log("微信 13312881650")
+</script>
+
+</body>
+</html>
